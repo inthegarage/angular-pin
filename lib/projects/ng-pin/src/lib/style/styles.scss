@@ -1,0 +1,71 @@
+/* You can add global styles to this file, and also import other style files */
+.popover-box {
+  position: absolute;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  display: inline;
+  top: -46px;
+  left: -2px;
+  white-space:nowrap;
+  padding:3px;
+  color: rgb(255, 255, 255);
+  background: rgb(0, 0, 0) none repeat scroll 0 0;
+  opacity: 0.8;
+  height: auto;
+  line-height: 40px;
+  border-radius: 5px;
+  cursor:context-menu;
+  box-shadow: rgba(0, 0, 0, 0.75) 2px 3px 5px 0;
+}
+
+/* MODAL STYLES
+-------------------------------*/
+jw-modal {
+  /* modals are hidden by default */
+  display: none;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+
+  .jw-modal {
+    /* modal container fixed across whole screen */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 30%;
+
+    /* z-index must be higher than .jw-modal-background */
+    z-index: 1000;
+
+    /* enables scrolling for tall modals */
+    overflow: auto;
+
+    .jw-modal-body {
+      padding: 20px;
+      background: lightgray;
+      border-radius: 10px;
+      /* margin exposes part of the modal background */
+      margin: 40px;
+    }
+  }
+
+  .jw-modal-background {
+    /* modal background fixed across whole screen */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    /* semi-transparent black  */
+    background-color: #000;
+    opacity: 0.75;
+
+    /* z-index must be below .jw-modal and above everything else  */
+    z-index: 900;
+  }
+}
+
+body.jw-modal-open {
+  /* body overflow is hidden to hide main scrollbar when modal window is open */
+  overflow: hidden;
+}
