@@ -1,6 +1,11 @@
 {
   "name": "ng-pin",
   "version": "0.0.2",
+  "repository" : {
+    "type" : "git",
+    "url": "ssh://git@github.com/inthegarage/inthegarage/angular-pin.git",
+    "directory": "lib/"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
