@@ -1,24 +1,40 @@
-# NgPin
+# ng-pin
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
+This is the library project for ng-pin.
 
-## Code scaffolding
+To use simply include the package in your package.json
+```html
+<section angular-pin [(pinInformation)]="pinInformation">
 
-Run `ng generate component component-name --project ng-pin` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ng-pin`.
-> Note: Don't forget to add `--project ng-pin` or else it will be added to the default project in your `angular.json` file. 
+</section>
+```
+pinInformation can be defined as follows:
 
-## Build
+```typescript
+pinInformation : PinInformation = <PinInformation>{pins  : []};
+```
 
-Run `ng build ng-pin` to build the project. The build artifacts will be stored in the `dist/` directory.
+and then fill it in.
 
-## Publishing
+```typescript
+    this.pinInformation.imageLocation = './assets/westgate.jpg';
+    this.pinInformation.imageXSize = 600;
+    this.pinInformation.imageYSize = 900;
+    let pin = new Pin();
+    pin.text = 'Westgate Towers';
+    pin.xcoords = 20;
+    pin.ycoords = 100;
+    pin.size = Size.Medium;
+    this.pinInformation.pins.push(pin);
+```
 
-After building your library with `ng build ng-pin`, go to the dist folder `cd dist/ng-pin` and run `npm publish`.
+The initial pin array can be empty. The initial asset location should be somewhere an image is.
 
-## Running unit tests
-
-Run `ng test ng-pin` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+In your angular.json you need to specify at least where the ng-pin stylesheet comes from:
+```JSON
+{
+  "styles": [
+    "./node_modules/ng-pin/assets/styles.css"
+  ]
+}
+```
