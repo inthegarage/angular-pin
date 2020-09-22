@@ -12,7 +12,7 @@
     "build-ng-pin-styles": "sass ./projects/ng-pin/src/lib/style/styles.scss ./dist/ng-pin/assets/styles.css",
     "cp-ng-pin-assets": "cpx \"./projects/ng-pin/src/lib/assets/**\" \"./dist/ng-pin/assets\""
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "~8.2.14",
     "@angular/common": "~8.2.14",
