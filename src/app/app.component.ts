@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
-import {PinInformation} from "./objects/pin.information";
-import {Pin, Size} from "./objects/pin.object";
+import {Pin, PinInformation, Size} from "ng-pin";
 
 @Component({
   selector: 'app-root',

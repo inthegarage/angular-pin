@@ -2,16 +2,14 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {AngularPin} from './angular-pin/angular-pin.directive';
-import {DialogModule} from "./angular-pin/dialog/dialog.module";
+import {AngularPinModule} from "ng-pin";
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AngularPin
+    AppComponent
   ],
   imports: [
-    BrowserModule, DialogModule
+    BrowserModule, AngularPinModule
   ],
   providers: [],
   bootstrap: [AppComponent]
