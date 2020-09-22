@@ -28,4 +28,13 @@ and then fill it in.
     this.pinInformation.pins.push(pin);
 ```
 
-The initial pin array can be empty.
+The initial pin array can be empty. The initial asset location should be somewhere an image is.
+
+In your angular.json you need to specify at least where the ng-pin stylesheet comes from:
+```JSON
+{
+  "styles": [
+    "./node_modules/ng-pin/assets/styles.css"
+  ]
+}
+```
