@@ -5,6 +5,7 @@ Allows an image to have pins applied.
 npm i ng-pin
 
 #Road Map
+
 - Increase Testing
 - Provide facility for fixed pins, showing a more detailed view
 - Improvements and bug fixes
