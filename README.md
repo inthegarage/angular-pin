@@ -12,9 +12,12 @@ npm i ng-pin
 # Thanks To
 - Jason Watmore for Angular Modal Dialog
   https://github.com/cornflourblue/angular-9-custom-modal
+  
   Refactored and included in this project.
   
 # From an idea by 
 - 'atayahmet' - easypin a jquery pinning system
+
   https://github.com/atayahmet/jquery.easypin
+  
   Completely rewritten for angular 8+
