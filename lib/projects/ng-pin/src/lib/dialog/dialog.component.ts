@@ -14,7 +14,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   @Input()
   captionText : string = '';
   pinId : string = null;
-  private element: any;
+  private readonly element: any;
 
   constructor(private modalService: ModalService, private el: ElementRef) {
     this.element = el.nativeElement;

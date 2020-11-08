@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {DialogComponent} from "./dialog.component";
 import {Subject} from "rxjs";
-import {PinUpdate} from "../objects/pin.object";
+import {PinUpdate} from "../objects";
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {
