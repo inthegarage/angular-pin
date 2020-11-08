@@ -1,20 +1,32 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {AngularPinModule, PinInformation} from "ng-pin";
+import {Component} from "@angular/core";
 
-import {AngularPin} from './angular-pin.directive';
+@Component({
+  template: `
+    <div angular-pin [pinInformation]="pinInformation">
 
-describe('AngularPinComponent', () => {
-  let component: AngularPin;
-  let fixture: ComponentFixture<AngularPin>;
+    </div>`
+})
+class TestComponent {
+
+  pinInformation : PinInformation = {pins: [] } as PinInformation;
+}
+
+describe('AngularPinDirective', () => {
+  let component: TestComponent;
+  let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AngularPin ]
+      declarations: [ TestComponent ],
+      imports: [AngularPinModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AngularPin);
+    fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
