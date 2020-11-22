@@ -40,7 +40,6 @@ export class AngularPin implements OnInit {
               private renderer : Renderer2) { }
 
   ngOnInit() {
-    console.log(this.pinInformation)
     this.renderImage();
     this.renderPins();
   }
