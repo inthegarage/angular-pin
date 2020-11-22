@@ -2,7 +2,9 @@
   <div class="jw-modal-body">
     <h3>Edit Caption Text</h3>
     <div>
-      <span>Caption: <input type="text" [(ngModel)]="captionText" /></span>
+      <span><label for="text-entry">
+        Caption:</label> <input type="text" id="text-entry"
+                                [(ngModel)]="captionText" /></span>
     </div>
     <div>
       <button (click)="save()">Save</button>
