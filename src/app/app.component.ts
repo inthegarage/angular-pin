@@ -1,18 +1,18 @@
 import {Component} from '@angular/core';
-import {Pin, PinInformation, Size} from "ng-pin";
+import {Pin, PinInformation, Size} from 'ng-pin';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  pinInformation : PinInformation = <PinInformation>{pins  : []};
+  pinInformation: PinInformation =  {pins: []} as PinInformation;
 
   constructor() {
     this.pinInformation.imageLocation = './assets/westgate.jpg';
     this.pinInformation.imageXSize = 600;
     this.pinInformation.imageYSize = 900;
-    let pin = new Pin();
+    const pin = new Pin();
     pin.text = 'Westgate Towers';
     pin.xcoords = 20;
     pin.ycoords = 100;

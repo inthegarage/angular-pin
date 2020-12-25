@@ -1,6 +1,6 @@
-import { TestBed, async } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-import {AngularPinModule} from "ng-pin";
+import {TestBed, async} from '@angular/core/testing';
+import {AppComponent} from './app.component';
+import {AngularPinModule} from 'ng-pin';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
