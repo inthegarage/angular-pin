@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {AngularPinModule} from "ng-pin";
+import {AngularPinModule} from 'ng-pin';
 
 @NgModule({
   declarations: [
@@ -14,4 +14,5 @@ import {AngularPinModule} from "ng-pin";
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
