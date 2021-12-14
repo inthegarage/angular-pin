@@ -4,4 +4,4 @@
 
 export * from './lib/angular-pin.directive';
 export * from './lib/angular-pin.module';
-export * from './lib/objects';
+export * from './lib/objects/index';
