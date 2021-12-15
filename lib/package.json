@@ -1,6 +1,6 @@
 {
   "name": "ng-pin",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com/inthegarage/inthegarage/angular-pin.git",
