@@ -9,8 +9,8 @@ import {
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
-import {PinInformation} from "./objects/pin.information";
-import {Direction, Pin, PinUpdate, Size} from "./objects/pin.object";
+import {PinInformation} from "./objects";
+import {Direction, Pin, PinUpdate, Size} from "./objects";
 import {DOCUMENT} from "@angular/common";
 import {ModalService} from "./dialog/dialog.service";
 import {DialogComponent} from "./dialog/dialog.component";

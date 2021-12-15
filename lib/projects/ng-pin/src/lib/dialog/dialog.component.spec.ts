@@ -1,6 +1,6 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 
-import { DialogComponent } from './dialog.component';
+import {DialogComponent} from './dialog.component';
 import {FormsModule} from "@angular/forms";
 import {ModalService} from "./dialog.service";
 
@@ -9,14 +9,15 @@ describe('DialogComponent', () => {
   let fixture: ComponentFixture<DialogComponent>;
   const spy: { fireUpdate: jasmine.Spy, add: jasmine.Spy, remove: jasmine.Spy } =
     jasmine.createSpyObj('ModalService', ['fireUpdate', 'add', 'remove']);
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [ DialogComponent ],
       imports: [FormsModule],
       providers:[{provide: ModalService, useValue: spy}]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DialogComponent);
