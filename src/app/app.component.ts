@@ -6,19 +6,21 @@ import {Pin, PinInformation, Size, PinInformationType} from 'ng-pin';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  pinInformation: PinInformation =  {pins: []} as PinInformation;
+  fixedPinInformation: PinInformation =  {pins: []} as PinInformation;
 
   constructor() {
-    this.pinInformation.imageLocation = './assets/westgate.jpg';
-    this.pinInformation.imageXSize = 600;
-    this.pinInformation.imageYSize = 900;
-    this.pinInformation.readOnly = true;
-    this.pinInformation.pinType = PinInformationType.EXPAND_PINS;
+    this.fixedPinInformation.imageLocation = './assets/westgate.jpg';
+    this.fixedPinInformation.imageXSize = 600;
+    this.fixedPinInformation.imageYSize = 900;
+    //Uncomment to stop the pins walking
+    //this.fixedPinInformation.readOnly = true;
+    this.fixedPinInformation.pinType = PinInformationType.MOVABLE_PINS;
     const pin = new Pin();
-    pin.text = 'Westgate Towers';
-    pin.xcoords = 20;
-    pin.ycoords = 100;
+    pin.title = 'Westgate Towers'
+    pin.text = 'Old towers';
+    pin.xcoords = 300;
+    pin.ycoords = 150;
     pin.size = Size.Medium;
-    this.pinInformation.pins.push(pin);
+    this.fixedPinInformation.pins.push(pin);
   }
 }

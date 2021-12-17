@@ -57,7 +57,12 @@ export class AngularPin implements OnInit {
     if (this.pinInformation.pins.length > 0) {
       let vm = this;
       this.pinInformation.pins.forEach((nextPin: Pin) => {
-        vm.addExpandablePin(vm, nextPin);
+        if (vm.pinInformation.pinType === PinInformationType.MOVABLE_PINS) {
+          vm.addAPin(vm, nextPin);
+        } else {
+          vm.addExpandablePin(vm, nextPin);
+        }
+
       })
       this.addDialogProcessor();
     }
@@ -67,31 +72,65 @@ export class AngularPin implements OnInit {
     let spanArea = this.renderer.createElement("span");
     nextPin.id = vm.uuidv4();
     let spanPlus = vm.renderer.createElement('span');
-    vm.renderer.setAttribute(spanPlus, 'class', 'static-plus');
+    vm.renderer.addClass(spanPlus,  'static-plus');
     vm.renderer.setProperty(spanPlus, 'innerHTML', '+');
     vm.renderer.appendChild(spanArea, spanPlus);
+
     if (nextPin.text) {
       let spanCaption = vm.renderer.createElement("span");
       let spanBorder = vm.renderer.createElement('span');
       let spanContent = vm.renderer.createElement('span');
-      let spanTitle = vm.renderer.createElement('span')
-      vm.renderer.setAttribute(spanBorder, 'class', 'static-border');
-      vm.renderer.setAttribute(spanCaption, 'class', 'static-box');
-      vm.renderer.setAttribute(spanTitle, 'class', 'static-title');
-      vm.renderer.setAttribute(spanContent, 'class', 'static-content');
+      let spanTitle = vm.renderer.createElement('span');
+      vm.renderer.addClass(spanBorder, 'static-border');
+      vm.renderer.addClass(spanCaption, 'static-box');
+      vm.renderer.addClass(spanCaption, 'hidden')
+      vm.renderer.addClass(spanTitle, 'static-title');
+      vm.renderer.setProperty(spanTitle, 'innerHTML', nextPin.title);
+      vm.renderer.addClass(spanContent, 'static-content');
       vm.renderer.setProperty(spanContent, 'innerHTML', nextPin.text);
       vm.renderer.appendChild(spanCaption, spanBorder);
       vm.renderer.appendChild(spanCaption, spanTitle);
       vm.renderer.appendChild(spanCaption, spanContent);
       vm.renderer.appendChild(spanArea, spanCaption);
+      vm.renderer.appendChild(vm.el.nativeElement, spanArea);
+      setTimeout(() => {
+        vm.computeCaptionPlacement(vm, spanArea, spanCaption);
+      }, 10)
+
     }
     vm.renderer.setAttribute(spanArea, 'id', nextPin.id);
-    vm.renderer.setAttribute(spanArea, 'class', 'pin-marker');
-    //vm.renderer.setProperty(spanArea, 'innerHTML', '+');
+    vm.renderer.addClass(spanArea, 'pin-marker');
     vm.renderer.setAttribute(spanArea, 'style', this.stylePin(nextPin));
-    vm.renderer.appendChild(vm.el.nativeElement, spanArea);
+
     vm.pins.set(nextPin.id, spanArea);
     return nextPin.id;
+  }
+
+  private computeCaptionPlacement(vm: AngularPin, spanArea : HTMLElement, spanCaption: HTMLElement) {
+
+    const spanAreaLeft = spanArea.offsetLeft;
+    const spanAreaTop = spanArea.offsetTop;
+
+    const imageAreaHeight = vm.el.nativeElement.offsetHeight;
+    const imageAreaWidth = vm.el.nativeElement.offsetWidth;
+
+    const heightRatio = imageAreaHeight/spanAreaTop;
+    const widthRatio = imageAreaWidth/spanAreaLeft;
+
+    if (heightRatio < 2) {
+      // caption is over (H) 1/2 way so position is upwards.
+      vm.renderer.setStyle(spanCaption, 'top', '-170px');
+    } else {
+      vm.renderer.setStyle(spanCaption, 'top', '32px');
+    }
+
+    if (widthRatio < 2) {
+      // caption is over (W) 1/2 way so position is leftwards
+      vm.renderer.setStyle(spanCaption, 'left', '-300px');
+    } else {
+      vm.renderer.setStyle(spanCaption, 'left', '32px');
+    }
+
   }
 
   private addAPin(vm: AngularPin, nextPin: Pin): string {
@@ -99,14 +138,14 @@ export class AngularPin implements OnInit {
 
     if (nextPin.text) {
       let spanCaption = this.renderer.createElement("span");
-      vm.renderer.setAttribute(spanCaption, 'class', 'popover-box');
+      vm.renderer.addClass(spanCaption, 'popover-box');
       vm.renderer.setProperty(spanCaption, 'innerHTML', nextPin.text);
       vm.renderer.appendChild(spanArea, spanCaption);
     }
 
     nextPin.id = vm.uuidv4();
     vm.renderer.setAttribute(spanArea, 'id', nextPin.id);
-    vm.renderer.setAttribute(spanArea, 'class', 'pin');
+    vm.renderer.addClass(spanArea, 'pin');
     vm.renderer.setAttribute(spanArea, 'style', this.stylePin(nextPin));
     vm.renderer.appendChild(vm.el.nativeElement, spanArea);
     vm.pins.set(nextPin.id, spanArea);
@@ -146,15 +185,16 @@ export class AngularPin implements OnInit {
   }
 
   private stylePin(nextPin: Pin): string {
-    let style: string = '';
-    if (!this.pinInformation.readOnly) {
+    let style: string;
+    if (!this.pinInformation.readOnly && this.pinInformation.pinType !== PinInformationType.EXPAND_PINS) {
       style = 'background-image: url(\'./assets/marker.png\'); ' +
         'cursor:grab;position:absolute;top:' + nextPin.ycoords + 'px;left:' + nextPin.xcoords + 'px;';
     } else {
-      // style = 'background-image: url(\'./assets/marker.png\'); ' +
-      //   'position:absolute;top:' + nextPin.ycoords + 'px;left:' + nextPin.xcoords + 'px;';
-      style = 'cursor:pointer;top:' + nextPin.ycoords + 'px;left:' + nextPin.xcoords + 'px;';
-
+      if (this.pinInformation.pinType !== PinInformationType.MOVABLE_PINS) {
+        style = 'cursor:pointer;position:absolute;top:' + nextPin.ycoords + 'px;left:' + nextPin.xcoords + 'px;';
+      } else {
+        style = 'background-image: url(\'./assets/marker.png\'); position: absolute; top:' + nextPin.ycoords + 'px;left:' + nextPin.xcoords + 'px;';
+      }
     }
     switch (nextPin.size) {
       case Size.Large:
@@ -172,25 +212,17 @@ export class AngularPin implements OnInit {
 
   @HostListener('click', ['$event'])
   onClick(event) {
-    if (!this.pinInformation.readOnly) {
-      this.processEditingClick(event);
-    } else if (this.pinInformation.pinType === PinInformationType.EXPAND_PINS) {
+    if (this.pinInformation.pinType === PinInformationType.MOVABLE_PINS) {
+      if (!this.pinInformation.readOnly) {
+        this.processEditingClick(event);
+      }
+    } else {
       let targetElement : HTMLElement = event.target;
       this.processStaticItem(targetElement);
     }
   }
 
   private processStaticItem(targetElement : HTMLElement) {
-    var left = targetElement.offsetLeft;
-    var right = targetElement.offsetWidth - left;
-    var top = targetElement.offsetTop;
-    var bottom = targetElement.offsetHeight - top;
-
-    console.log("Left:" + left + "//");
-    console.log("Right:" + right + "//");
-    console.log("Top:" + top + "//");
-    console.log("Bottom:" + bottom);
-
     let parentElement : HTMLElement = null;
     this.removeCurrentStaticBlock();
     if (targetElement.classList.contains('static-plus')) {
@@ -200,14 +232,14 @@ export class AngularPin implements OnInit {
     }
     if (parentElement != null) {
       this.currentId = parentElement.id;
-      this.renderer.setStyle(parentElement.childNodes[1], 'display', 'block');
+      this.renderer.removeClass(parentElement.childNodes[1], 'hidden');
     }
   }
 
   private removeCurrentStaticBlock() {
     if (this.currentId) {
       const currentEle = this.document.getElementById(this.currentId);
-      this.renderer.setStyle(currentEle.childNodes[1], 'display', 'none');
+      this.renderer.addClass(currentEle.childNodes[1], 'hidden');
       this.currentId = null;
     }
   }
@@ -238,7 +270,7 @@ export class AngularPin implements OnInit {
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(event) {
-    if (!this.pinInformation.readOnly) {
+    if (!this.pinInformation.readOnly && this.pinInformation.pinType === PinInformationType.MOVABLE_PINS) {
       this.currentId = event.target.id;
       if (this.pins.has(this.currentId)) {
         let vm = this;
@@ -253,7 +285,7 @@ export class AngularPin implements OnInit {
   @HostListener('mouseup', ['$event'])
   onMouseUp(event) {
     // always cancel the selection.
-    if (!this.pinInformation.readOnly) {
+    if (!this.pinInformation.readOnly && this.pinInformation.pinType === PinInformationType.MOVABLE_PINS) {
       let vm = this;
       setTimeout(function () {
         vm.hasSelected = false;
