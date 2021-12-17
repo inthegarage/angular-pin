@@ -291,6 +291,7 @@ export class AngularPin implements OnInit {
         vm.hasSelected = false;
         vm.currentId = null;
         vm.clickReceived = true;
+        vm.pinInformationChange.emit(vm.pinInformation);
       }, 10);
     }
   }
