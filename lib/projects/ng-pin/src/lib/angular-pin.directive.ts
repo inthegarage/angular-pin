@@ -172,7 +172,6 @@ export class AngularPin implements OnInit {
 
   @HostListener('click', ['$event'])
   onClick(event) {
-    console.log('PARTS')
     if (!this.pinInformation.readOnly) {
       this.processEditingClick(event);
     } else if (this.pinInformation.pinType === PinInformationType.EXPAND_PINS) {
@@ -182,6 +181,16 @@ export class AngularPin implements OnInit {
   }
 
   private processStaticItem(targetElement : HTMLElement) {
+    var left = targetElement.offsetLeft;
+    var right = targetElement.offsetWidth - left;
+    var top = targetElement.offsetTop;
+    var bottom = targetElement.offsetHeight - top;
+
+    console.log("Left:" + left + "//");
+    console.log("Right:" + right + "//");
+    console.log("Top:" + top + "//");
+    console.log("Bottom:" + bottom);
+
     let parentElement : HTMLElement = null;
     this.removeCurrentStaticBlock();
     if (targetElement.classList.contains('static-plus')) {
