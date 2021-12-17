@@ -1,5 +1,6 @@
 export class Pin {
   text : string = '';
+  title: string = '';
   xcoords : number = 0;
   ycoords : number = 0;
   id : string = null;

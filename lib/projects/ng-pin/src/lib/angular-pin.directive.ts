@@ -1,16 +1,17 @@
 import {
   ComponentFactoryResolver,
   Directive,
-  ElementRef, EventEmitter,
+  ElementRef,
+  EventEmitter,
   HostListener,
   Inject,
   Input,
-  OnInit, Output,
+  OnInit,
+  Output,
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
-import {PinInformation} from "./objects";
-import {Direction, Pin, PinUpdate, Size} from "./objects";
+import {Direction, Pin, PinInformation, PinInformationType, PinUpdate, Size} from "./objects";
 import {DOCUMENT} from "@angular/common";
 import {ModalService} from "./dialog/dialog.service";
 import {DialogComponent} from "./dialog/dialog.component";
@@ -22,14 +23,14 @@ import {Subject} from "rxjs";
 export class AngularPin implements OnInit {
 
   @Input()
-  pinInformation : PinInformation = <PinInformation>{};
+  pinInformation: PinInformation = <PinInformation>{};
   @Output()
-  pinInformationChange : EventEmitter<PinInformation> = new EventEmitter<PinInformation>();
+  pinInformationChange: EventEmitter<PinInformation> = new EventEmitter<PinInformation>();
 
-  private pins : Map<string, any>= new Map<string, any>()
-  private hasSelected : boolean = false;
-  private clickReceived : boolean = false;
-  private currentId : string = null;
+  private pins: Map<string, any> = new Map<string, any>()
+  private hasSelected: boolean = false;
+  private clickReceived: boolean = false;
+  private currentId: string = null;
   private updateSubject = new Subject<PinUpdate>();
 
   constructor(@Inject(DOCUMENT) private document: any,
@@ -37,7 +38,8 @@ export class AngularPin implements OnInit {
               private modalService: ModalService,
               private viewContainerRef: ViewContainerRef,
               private componentFactoryResolver: ComponentFactoryResolver,
-              private renderer : Renderer2) { }
+              private renderer: Renderer2) {
+  }
 
   ngOnInit() {
     this.renderImage();
@@ -54,18 +56,50 @@ export class AngularPin implements OnInit {
   private renderPins() {
     if (this.pinInformation.pins.length > 0) {
       let vm = this;
-      this.pinInformation.pins.forEach((nextPin : Pin) => {
-        vm.addAPin(vm, nextPin);
+      this.pinInformation.pins.forEach((nextPin: Pin) => {
+        vm.addExpandablePin(vm, nextPin);
       })
       this.addDialogProcessor();
     }
   }
 
-  private addAPin(vm : AngularPin, nextPin : Pin) : string {
+  private addExpandablePin(vm: AngularPin, nextPin: Pin) {
     let spanArea = this.renderer.createElement("span");
+    nextPin.id = vm.uuidv4();
+    let spanPlus = vm.renderer.createElement('span');
+    vm.renderer.setAttribute(spanPlus, 'class', 'static-plus');
+    vm.renderer.setProperty(spanPlus, 'innerHTML', '+');
+    vm.renderer.appendChild(spanArea, spanPlus);
     if (nextPin.text) {
-      let spanCaption = this.renderer.createElement("span")
-      vm.renderer.setAttribute(spanCaption, 'class','popover-box')
+      let spanCaption = vm.renderer.createElement("span");
+      let spanBorder = vm.renderer.createElement('span');
+      let spanContent = vm.renderer.createElement('span');
+      let spanTitle = vm.renderer.createElement('span')
+      vm.renderer.setAttribute(spanBorder, 'class', 'static-border');
+      vm.renderer.setAttribute(spanCaption, 'class', 'static-box');
+      vm.renderer.setAttribute(spanTitle, 'class', 'static-title');
+      vm.renderer.setAttribute(spanContent, 'class', 'static-content');
+      vm.renderer.setProperty(spanContent, 'innerHTML', nextPin.text);
+      vm.renderer.appendChild(spanCaption, spanBorder);
+      vm.renderer.appendChild(spanCaption, spanTitle);
+      vm.renderer.appendChild(spanCaption, spanContent);
+      vm.renderer.appendChild(spanArea, spanCaption);
+    }
+    vm.renderer.setAttribute(spanArea, 'id', nextPin.id);
+    vm.renderer.setAttribute(spanArea, 'class', 'pin-marker');
+    //vm.renderer.setProperty(spanArea, 'innerHTML', '+');
+    vm.renderer.setAttribute(spanArea, 'style', this.stylePin(nextPin));
+    vm.renderer.appendChild(vm.el.nativeElement, spanArea);
+    vm.pins.set(nextPin.id, spanArea);
+    return nextPin.id;
+  }
+
+  private addAPin(vm: AngularPin, nextPin: Pin): string {
+    let spanArea = this.renderer.createElement("span");
+
+    if (nextPin.text) {
+      let spanCaption = this.renderer.createElement("span");
+      vm.renderer.setAttribute(spanCaption, 'class', 'popover-box');
       vm.renderer.setProperty(spanCaption, 'innerHTML', nextPin.text);
       vm.renderer.appendChild(spanArea, spanCaption);
     }
@@ -81,13 +115,13 @@ export class AngularPin implements OnInit {
 
   private addDialogProcessor() {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DialogComponent);
-    const component :any = this.viewContainerRef.createComponent(componentFactory);
+    const component: any = this.viewContainerRef.createComponent(componentFactory);
     component.instance.id = 'text-modal'
     this.renderer.setAttribute(component.location.nativeElement, 'id', 'text-modal')
     this.modalService.addListener(this.updateSubject);
     let vm = this;
     vm.updateSubject.asObservable().subscribe(pinUpdate => {
-      let pin  : Pin = vm.pinInformation.pins.find(item => item.id === pinUpdate.id);
+      let pin: Pin = vm.pinInformation.pins.find(item => item.id === pinUpdate.id);
       let index = vm.pinInformation.pins.indexOf(pin);
       let element = vm.document.getElementById(pinUpdate.id);
       if (pinUpdate.text === null) {
@@ -111,9 +145,17 @@ export class AngularPin implements OnInit {
 
   }
 
-  private stylePin(nextPin: Pin) : string {
-    let style : string = 'background-image: url(\'./assets/marker.png\'); ' +
-      'cursor:grab;position:absolute;top:' + nextPin.ycoords + 'px;left:' + nextPin.xcoords + 'px;'
+  private stylePin(nextPin: Pin): string {
+    let style: string = '';
+    if (!this.pinInformation.readOnly) {
+      style = 'background-image: url(\'./assets/marker.png\'); ' +
+        'cursor:grab;position:absolute;top:' + nextPin.ycoords + 'px;left:' + nextPin.xcoords + 'px;';
+    } else {
+      // style = 'background-image: url(\'./assets/marker.png\'); ' +
+      //   'position:absolute;top:' + nextPin.ycoords + 'px;left:' + nextPin.xcoords + 'px;';
+      style = 'cursor:pointer;top:' + nextPin.ycoords + 'px;left:' + nextPin.xcoords + 'px;';
+
+    }
     switch (nextPin.size) {
       case Size.Large:
         style += 'width: 64px;height: 64px;background-size: 64px 64px;';
@@ -130,18 +172,50 @@ export class AngularPin implements OnInit {
 
   @HostListener('click', ['$event'])
   onClick(event) {
+    console.log('PARTS')
+    if (!this.pinInformation.readOnly) {
+      this.processEditingClick(event);
+    } else if (this.pinInformation.pinType === PinInformationType.EXPAND_PINS) {
+      let targetElement : HTMLElement = event.target;
+      this.processStaticItem(targetElement);
+    }
+  }
+
+  private processStaticItem(targetElement : HTMLElement) {
+    let parentElement : HTMLElement = null;
+    this.removeCurrentStaticBlock();
+    if (targetElement.classList.contains('static-plus')) {
+      parentElement = targetElement.parentElement;
+    } else if (targetElement.classList.contains('pin-marker')) {
+      parentElement = targetElement;
+    }
+    if (parentElement != null) {
+      this.currentId = parentElement.id;
+      this.renderer.setStyle(parentElement.childNodes[1], 'display', 'block');
+    }
+  }
+
+  private removeCurrentStaticBlock() {
+    if (this.currentId) {
+      const currentEle = this.document.getElementById(this.currentId);
+      this.renderer.setStyle(currentEle.childNodes[1], 'display', 'none');
+      this.currentId = null;
+    }
+  }
+
+  private processEditingClick(event) {
     let targetElement = event.target;
     if (event.target.classList.contains('popover-box')) {
       targetElement = targetElement.parentNode;
     }
-    let id : string=  targetElement.id;
+    let id: string = targetElement.id;
     if (this.pins.has(id) && !this.hasSelected) {
       this.clickReceived = true;
-      let pin  : Pin = this.pinInformation.pins.find(item => item.id === id);
+      let pin: Pin = this.pinInformation.pins.find(item => item.id === id);
       this.modalService.open('text-modal', pin.id, pin.text);
     } else if (!this.pins.has(id) && !this.hasSelected) {
       // clicking somewhere new, therefore add a pin.
-      let pin : Pin = <Pin>{};
+      let pin: Pin = <Pin>{};
       pin.xcoords = event.offsetX;
       pin.ycoords = event.offsetY;
       pin.direction = Direction.Down;
@@ -155,24 +229,29 @@ export class AngularPin implements OnInit {
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(event) {
-    this.currentId = event.target.id;
-   if (this.pins.has(this.currentId)) {
-      let vm = this;
-      setTimeout(function() {
-        vm.hasSelected = true;
-      }, 300)
+    if (!this.pinInformation.readOnly) {
+      this.currentId = event.target.id;
+      if (this.pins.has(this.currentId)) {
+        let vm = this;
+        setTimeout(function () {
+          vm.hasSelected = true;
+        }, 0)
+      }
     }
+
   }
 
   @HostListener('mouseup', ['$event'])
   onMouseUp(event) {
     // always cancel the selection.
-    let vm = this;
-    setTimeout(function() {
-      vm.hasSelected = false;
-      vm.currentId = null;
-      vm.clickReceived = true;
-    }, 10)
+    if (!this.pinInformation.readOnly) {
+      let vm = this;
+      setTimeout(function () {
+        vm.hasSelected = false;
+        vm.currentId = null;
+        vm.clickReceived = true;
+      }, 10);
+    }
   }
 
 
@@ -180,8 +259,8 @@ export class AngularPin implements OnInit {
   onMouseMove(event) {
     if (this.hasSelected && this.currentId) {
       // Move
-      let thisPin : any = this.pins.get(this.currentId);
-      let pinInformation : Pin = this.pinInformation.pins.find(item => item.id === this.currentId);
+      let thisPin: any = this.pins.get(this.currentId);
+      let pinInformation: Pin = this.pinInformation.pins.find(item => item.id === this.currentId);
       if (thisPin && pinInformation) {
         pinInformation.xcoords = pinInformation.xcoords + event.movementX;
         pinInformation.ycoords = pinInformation.ycoords + event.movementY;
@@ -203,7 +282,7 @@ export class AngularPin implements OnInit {
   }
 
   private uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });

@@ -17,6 +17,51 @@
   box-shadow: rgba(0, 0, 0, 0.75) 2px 3px 5px 0;
 }
 
+.pin-marker {
+  background-color: #F44336;
+  opacity: 0.9;
+  font-size: 25px;
+  font-weight: bold;
+  color: #fff;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.static-box {
+  position: absolute;
+  cursor: default;
+  width: 300px;
+  height: 170px;
+  color: #2F0200;
+  display: none;
+}
+
+.static-border {
+  background-color: whitesmoke;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border-radius: 7px;
+}
+
+.static-title {
+  position: relative;
+  height:30px;
+  width: 100%;
+  display: inline-block;
+  margin: 5px;
+;
+}
+.static-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  margin: 5px;
+}
+
 /* MODAL STYLES
 -------------------------------*/
 jw-modal {
@@ -45,7 +90,37 @@ jw-modal {
       border-radius: 10px;
       /* margin exposes part of the modal background */
       margin: 40px;
+      .jw-modal-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0 15px 15px 0;
+      }
+      .jw-modal-buttons {
+        button {
+          margin: 0 5px 0 0;
+          box-shadow:inset 0 1px 0 0 #cf866c;
+          background-color:#d0451b;
+          border-radius:3px;
+          border:1px solid #942911;
+          display:inline-block;
+          cursor:pointer;
+          color:#ffffff;
+          font-family: Arial, serif;
+          font-size:13px;
+          padding:6px 24px;
+          text-shadow:0 1px 0 #854629;
+        }
+        button:hover {
+          background-color:#bc3315;
+        }
+        button:active {
+          position:relative;
+          top:1px;
+        }
+      }
     }
+
   }
 
   .jw-modal-background {

@@ -57,7 +57,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
   remove() :void {
-    this.removeDialog()
+    this.removeDialog();
     this.modalService.fireUpdate({id : this.pinId, text : null});
   }
 
@@ -67,4 +67,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   }
 
 
+  cancel() {
+    this.removeDialog();
+  }
 }

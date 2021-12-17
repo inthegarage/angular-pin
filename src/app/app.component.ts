@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Pin, PinInformation, Size} from 'ng-pin';
+import {Pin, PinInformation, Size, PinInformationType} from 'ng-pin';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +12,8 @@ export class AppComponent {
     this.pinInformation.imageLocation = './assets/westgate.jpg';
     this.pinInformation.imageXSize = 600;
     this.pinInformation.imageYSize = 900;
+    this.pinInformation.readOnly = true;
+    this.pinInformation.pinType = PinInformationType.EXPAND_PINS;
     const pin = new Pin();
     pin.text = 'Westgate Towers';
     pin.xcoords = 20;

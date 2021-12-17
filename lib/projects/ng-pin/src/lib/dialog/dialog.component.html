@@ -1,13 +1,18 @@
 <div class="jw-modal">
   <div class="jw-modal-body">
     <h3>Edit Caption Text</h3>
-    <div>
-      <span><label for="text-entry">
-        Caption:</label> <input type="text" id="text-entry" [(ngModel)]="captionText" /></span>
+    <div class="jw-modal-content">
+      <span>
+        <label for="text-entry">Caption:</label>
+      </span>
+      <span>
+        <input type="text" id="text-entry" [(ngModel)]="captionText" />
+      </span>
     </div>
-    <div>
-      <button (click)="save()">Save</button>
-      <button (click)="remove()">Remove</button>
+    <div class="jw-modal-buttons">
+      <button id="save" (click)="save()">Save</button>
+      <button id="remove" (click)="remove()">Remove</button>
+      <button id="cancel" (click)="cancel()">Cancel</button>
     </div>
   </div>
 </div>
