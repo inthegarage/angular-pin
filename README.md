@@ -1,6 +1,14 @@
 # angular-pin
 Allows an image to have pins applied.
 
+# Release notes
+
+Use 0.0.5 - a backwards compatible basic pin library.
+
+Use 0.0.8 - a NG 12 library only with bug fixes going forward.
+
+Use 0.0.5 for a stable release tab, current master is in development.
+
 # Installation
 npm i ng-pin
 
