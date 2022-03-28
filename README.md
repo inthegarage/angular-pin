@@ -5,17 +5,20 @@ Allows an image to have pins applied.
 
 Use 0.0.5 - a backwards compatible basic pin library.
 
-Use 0.0.8 - a NG 12 library only with bug fixes going forward.
+Use 0.0.11 - a NG 12 library only with bug fixes going forward.
 
-Use 0.0.5 for a stable release tab, current master is in development.
+Use 0.0.5 for a stable release branch, current master is in development.
 
 # Installation
 npm i ng-pin
 
+# Demos are now arriving! The first one with fixed pins is here:
+
+https://stackblitz.com/edit/angular-ivy-wqhpxn
+
 # Road Map
 
 - Increase Testing
-- Provide facility for fixed pins, showing a more detailed view
 - Improvements and bug fixes
 
 # Thanks To
