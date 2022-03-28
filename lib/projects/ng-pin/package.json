@@ -1,6 +1,6 @@
 {
   "name": "ng-pin",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "homepage": "https://github.com/inthegarage/angular-pin#readme",
   "license" : "MIT",
   "repository" : {
@@ -9,7 +9,7 @@
     "directory": "lib/"
   },
   "peerDependencies": {
-    "@angular/common": ">= 8.2.14 <= 12.2.14",
-    "@angular/core": ">= 8.2.14 <= 12.2.14"
+    "@angular/common": ">= 8.2.14 <= ~13.2.7",
+    "@angular/core": ">= 8.2.14 <= ~13.2.7"
   }
 }
