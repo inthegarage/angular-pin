@@ -20,11 +20,8 @@
     ]
   },
   "angularCompilerOptions": {
+    "enableIvy": true,
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
-    "paths": {
-      "ng-pin/*": ["/home/pete/workspace/github/angular-pin/lib/projects/ng-pin/src"]
-    }
-
   }
 }
