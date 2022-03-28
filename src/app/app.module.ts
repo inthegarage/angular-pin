@@ -9,7 +9,7 @@ import {AngularPinModule} from 'ng-pin';
     AppComponent
   ],
   imports: [
-    BrowserModule, AngularPinModule, AngularPinModule
+    BrowserModule, AngularPinModule
   ],
   providers: [],
   bootstrap: [AppComponent]
